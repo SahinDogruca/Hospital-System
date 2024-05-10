@@ -4,16 +4,21 @@ import Appointments from "@/components/dashboard/Appointments";
 import EditUser from "@/components/dashboard/EditUser";
 import { logout } from "@/utils/doctorApi";
 import { useUser } from "@/context/UserContext";
+import SetAppointment from "@/components/dashboard/SetAppointment";
 
-const Dashboard = () => {
+const Dashboard = ({ appointments, doctors, patients, times }) => {
   const { user, setUser, setIsLogged } = useUser();
-  const [showAppointments, setShowAppointments] = useState(true);
+  const [pageType, setPageType] = useState("Appointments");
+  const [type, setType] = useState(user?.specialty ? "doctors" : "patients");
 
   useEffect(() => {
     if (!user) {
       router.push("/");
     }
-  }, []);
+
+    setType(user.specialty ? "doctors" : "patients");
+    console.log(type);
+  }, [user]);
 
   return (
     <section id="dashboard" className="dashboard">
@@ -29,8 +34,16 @@ const Dashboard = () => {
                   <Link href="/">Home</Link>
                 </li>
 
-                <li onClick={() => setShowAppointments(true)}>Appointments</li>
-                <li onClick={() => setShowAppointments(false)}>Edit Profile</li>
+                <li onClick={() => setPageType("Appointments")}>
+                  Appointments
+                </li>
+                {type == "patients" && (
+                  <li onClick={() => setPageType("SetAppointment")}>
+                    Set Appointment
+                  </li>
+                )}
+                <li onClick={() => setPageType("EditProfile")}>Edit Profile</li>
+
                 <li
                   onClick={() => {
                     logout();
@@ -62,7 +75,16 @@ const Dashboard = () => {
                 </div>
               </div>
               <div className="content mt-2">
-                {showAppointments ? <Appointments /> : <EditUser />}
+                {pageType == "Appointments" && <Appointments />}
+                {pageType == "EditProfile" && <EditUser />}
+                {pageType == "SetAppointment" && (
+                  <SetAppointment
+                    appointments={appointments}
+                    doctors={doctors}
+                    patients={patients}
+                    times={times}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -71,5 +93,67 @@ const Dashboard = () => {
     </section>
   );
 };
+
+export async function getServerSideProps(context) {
+  try {
+    const dataAppointments = await fetch(
+      "http://localhost:8080/appointments/all",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const dataDoctors = await fetch("http://localhost:8080/doctors/all", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const dataPatients = await fetch("http://localhost:8080/patients/all", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const dataTimes = await fetch("http://localhost:8080/times/all", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (
+      !dataAppointments.ok ||
+      !dataDoctors.ok ||
+      !dataPatients.ok ||
+      !dataTimes.ok
+    ) {
+      throw new Error("Failed to fetch appointments data");
+    }
+    const appointments = await dataAppointments.json();
+    const doctors = await dataDoctors.json();
+    const patients = await dataPatients.json();
+    const times = await dataTimes.json();
+    return {
+      props: {
+        appointments,
+        doctors,
+        patients,
+        times,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching appointments data:", error);
+    return {
+      props: {
+        appointments: [],
+        doctors: [],
+        patients: [],
+        times: [],
+      },
+    };
+  }
+}
 
 export default Dashboard;

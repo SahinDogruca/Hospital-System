@@ -12086,12 +12086,12 @@ textarea.form-control-lg {
   font-size: 10rem;
 }
 
-form.form {
+form.register, form.login {
   width: 40%;
   margin: auto;
   height: 80vh;
 }
-form.form .error {
+form.register .error, form.login .error {
   position: absolute;
   color: red;
   font-size: 0.6rem;

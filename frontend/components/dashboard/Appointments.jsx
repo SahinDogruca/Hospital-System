@@ -4,7 +4,7 @@ const Appointments = () => {
   return (
     <div>
       <h3 className="content__title">Appointments</h3>
-      <table class="table">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">#</th>

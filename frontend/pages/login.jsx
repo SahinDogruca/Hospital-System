@@ -28,10 +28,14 @@ export default function App() {
             const usern = await login(values.tc, values.password, type);
 
             await setUser(usern);
-            setIsLogged(true);
-            localStorage.setItem("user", JSON.stringify(usern));
+            await setIsLogged(true);
 
-            router.push("/dashboard");
+            if (usern) {
+              localStorage.setItem("user", JSON.stringify(usern));
+              router.push("/dashboard");
+            } else {
+              console.log("User not found!");
+            }
           } catch (error) {
             console.error("Error:", error);
           }
@@ -41,7 +45,7 @@ export default function App() {
           <div>
             <h1 className="text-center">Signup</h1>
 
-            <Form className="form p-3">
+            <Form className="form p-3 login">
               <select
                 className="form-select"
                 name="colors"

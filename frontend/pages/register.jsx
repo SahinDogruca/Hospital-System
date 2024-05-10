@@ -47,7 +47,7 @@ export default function App() {
         {(formik) => (
           <div>
             <h1 className="text-center">Signup</h1>
-            <Form className="form p-3">
+            <Form className="form p-3 register">
               <select
                 className="form-select"
                 name="colors"

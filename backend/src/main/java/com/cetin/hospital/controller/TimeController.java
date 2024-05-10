@@ -23,6 +23,12 @@ public class TimeController {
         return times.stream().map(TimeResponse::new).toList();
     }
 
+    @GetMapping("/all")
+    public List<TimeResponse> getAllTimes() {
+        List<Time> times = timeService.getAllTimes();
+        return times.stream().map(TimeResponse::new).toList();
+    }
+
     @GetMapping
     public List<TimeResponse>  getTimesByDoctorTc(@RequestParam String TC) {
         List<Time> times = timeService.getTimesByDoctorTC(TC);
