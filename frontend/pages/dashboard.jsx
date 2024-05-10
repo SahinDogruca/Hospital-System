@@ -38,10 +38,19 @@ const Dashboard = ({ appointments, doctors, patients, times }) => {
                   Appointments
                 </li>
                 {type == "patients" && (
-                  <li onClick={() => setPageType("SetAppointment")}>
-                    Set Appointment
+                  <>
+                    <li onClick={() => setPageType("SetAppointment")}>
+                      Set Appointment
+                    </li>
+                    <li onClick={() => setPageType("Invoice")}>Invoice</li>
+                  </>
+                )}
+                {type == "doctors" && (
+                  <li onClick={() => setPageType("WritePrescription")}>
+                    Write Prescription
                   </li>
                 )}
+
                 <li onClick={() => setPageType("EditProfile")}>Edit Profile</li>
 
                 <li
@@ -85,6 +94,8 @@ const Dashboard = ({ appointments, doctors, patients, times }) => {
                     times={times}
                   />
                 )}
+                {pageType == "Invoice" && <Invoice />}
+                {pageType == "WritePrescription" && <WritePrescription />}
               </div>
             </div>
           </div>
