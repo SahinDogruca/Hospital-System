@@ -1,0 +1,11 @@
+form.form {
+    width: 40%;
+    margin: auto;
+    height: 80vh;
+
+    .error{
+        position: absolute;
+        color: red;
+        font-size: 0.6rem;
+      }
+}
