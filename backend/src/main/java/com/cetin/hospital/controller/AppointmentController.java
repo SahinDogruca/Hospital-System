@@ -1,10 +1,8 @@
 package com.cetin.hospital.controller;
 
 import com.cetin.hospital.model.Appointment;
-import com.cetin.hospital.model.Doctor;
 import com.cetin.hospital.request.AppointmentRequest;
 import com.cetin.hospital.response.AppointmentResponse;
-import com.cetin.hospital.response.DoctorResponse;
 import com.cetin.hospital.service.AppointmentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +26,6 @@ public class AppointmentController {
         return appointments.stream().map(AppointmentResponse::new).toList();
     }
 
-
     @GetMapping
     public List<AppointmentResponse> getAppointmentsByDoctorId(@RequestParam Long doctorId) {
         List<Appointment> appointments = appointmentService.getAppointmentsByDoctorId(doctorId);
@@ -42,7 +39,6 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentRequest appointmentRequest) {
-
         Appointment appointment = appointmentService.createAppointment(appointmentRequest);
         if (appointment != null) {
             return new ResponseEntity<>(appointment, HttpStatus.OK);

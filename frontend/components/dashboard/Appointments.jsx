@@ -1,6 +1,6 @@
 import React from "react";
 
-const Appointments = () => {
+const Appointments = ({ appointments, type }) => {
   return (
     <div>
       <h3 className="content__title">Appointments</h3>
@@ -8,30 +8,36 @@ const Appointments = () => {
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th scope="col">Doctor Name</th>
+            <th scope="col">
+              {type === "doctors" ? "Patient Name" : "Doctor Name"}
+            </th>
             <th scope="col">Date</th>
             <th scope="col">Time</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-          </tr>
+          {appointments.map((appointment) => (
+            <tr key={appointment.id}>
+              <th scope="row">{appointment.id}</th>
+              <td>
+                {type === "patients"
+                  ? appointment.time.doctor.name
+                  : appointment.patient.name}
+              </td>
+              <td>
+                {new Date(appointment.time.time).toLocaleDateString("tr-TR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </td>
+              <td>
+                {new Date(appointment.time.time).toLocaleTimeString("tr-TR", {
+                  hour12: false,
+                })}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

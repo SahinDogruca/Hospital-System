@@ -17,15 +17,15 @@ public class TimeController {
         this.timeService = timeService;
     }
 
-    @GetMapping("/doctorId/{doctorId}")
-    public List<TimeResponse> getTimesByDoctorId(@RequestParam Long doctorId) {
-        List<Time> times = timeService.getTimesByDoctorId(doctorId);
-        return times.stream().map(TimeResponse::new).toList();
-    }
-
     @GetMapping("/all")
     public List<TimeResponse> getAllTimes() {
         List<Time> times = timeService.getAllTimes();
+        return times.stream().map(TimeResponse::new).toList();
+    }
+
+    @GetMapping("/doctorId/{doctorId}")
+    public List<TimeResponse> getTimesByDoctorId(@PathVariable Long doctorId) {
+        List<Time> times = timeService.getTimesByDoctorId(doctorId);
         return times.stream().map(TimeResponse::new).toList();
     }
 

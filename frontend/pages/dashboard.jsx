@@ -5,8 +5,12 @@ import EditUser from "@/components/dashboard/EditUser";
 import { logout } from "@/utils/doctorApi";
 import { useUser } from "@/context/UserContext";
 import SetAppointment from "@/components/dashboard/SetAppointment";
+import Invoice from "@/components/dashboard/Invoice";
+import { useRouter } from "next/router";
+import WritePrescription from "@/components/dashboard/WritePrescription";
 
-const Dashboard = ({ appointments, doctors, patients, times }) => {
+const Dashboard = ({ appointments, doctors, patients, times, invoice }) => {
+  const router = useRouter();
   const { user, setUser, setIsLogged } = useUser();
   const [pageType, setPageType] = useState("Appointments");
   const [type, setType] = useState(user?.specialty ? "doctors" : "patients");
@@ -37,12 +41,12 @@ const Dashboard = ({ appointments, doctors, patients, times }) => {
                 <li onClick={() => setPageType("Appointments")}>
                   Appointments
                 </li>
+                <li onClick={() => setPageType("Invoice")}>Invoice</li>
                 {type == "patients" && (
                   <>
                     <li onClick={() => setPageType("SetAppointment")}>
                       Set Appointment
                     </li>
-                    <li onClick={() => setPageType("Invoice")}>Invoice</li>
                   </>
                 )}
                 {type == "doctors" && (
@@ -58,6 +62,7 @@ const Dashboard = ({ appointments, doctors, patients, times }) => {
                     logout();
                     setUser({});
                     setIsLogged(false);
+                    router.push("/");
                   }}
                 >
                   <Link href="/">Logout</Link>
@@ -84,18 +89,37 @@ const Dashboard = ({ appointments, doctors, patients, times }) => {
                 </div>
               </div>
               <div className="content mt-2">
-                {pageType == "Appointments" && <Appointments />}
+                {pageType == "Appointments" && (
+                  <Appointments
+                    appointments={appointments.filter((appointment) => {
+                      return type === "patients"
+                        ? appointment.patient.id === user.id
+                        : appointment.time.doctor.id === user.id;
+                    })}
+                    type={type}
+                  />
+                )}
                 {pageType == "EditProfile" && <EditUser />}
                 {pageType == "SetAppointment" && (
                   <SetAppointment
-                    appointments={appointments}
                     doctors={doctors}
                     patients={patients}
                     times={times}
                   />
                 )}
-                {pageType == "Invoice" && <Invoice />}
-                {pageType == "WritePrescription" && <WritePrescription />}
+                {pageType == "Invoice" && (
+                  <Invoice
+                    invoice={invoice.filter((item) => {
+                      return type === "patients"
+                        ? item.patient.tc === user.tc
+                        : item.doctor.tc === user.tc;
+                    })}
+                    type={type}
+                  />
+                )}
+                {pageType == "WritePrescription" && (
+                  <WritePrescription user={user} patients={patients} />
+                )}
               </div>
             </div>
           </div>
@@ -134,11 +158,18 @@ export async function getServerSideProps(context) {
         "Content-Type": "application/json",
       },
     });
+    const dataInvoice = await fetch("http://localhost:8080/prescriptions/all", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     if (
       !dataAppointments.ok ||
       !dataDoctors.ok ||
       !dataPatients.ok ||
-      !dataTimes.ok
+      !dataTimes.ok ||
+      !dataInvoice.ok
     ) {
       throw new Error("Failed to fetch appointments data");
     }
@@ -146,12 +177,14 @@ export async function getServerSideProps(context) {
     const doctors = await dataDoctors.json();
     const patients = await dataPatients.json();
     const times = await dataTimes.json();
+    const invoice = await dataInvoice.json();
     return {
       props: {
         appointments,
         doctors,
         patients,
         times,
+        invoice,
       },
     };
   } catch (error) {
@@ -162,6 +195,7 @@ export async function getServerSideProps(context) {
         doctors: [],
         patients: [],
         times: [],
+        invoice: [],
       },
     };
   }
