@@ -11984,10 +11984,24 @@ textarea.form-control-lg {
   display: inline-block;
   z-index: 10;
 }
-.header-wrapper .header-container .logout {
+.header-wrapper .header-container .buttons {
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.header-wrapper .header-container .buttons button {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 2.4rem;
+  color: #F7FCFF;
+  background-color: #0B568C;
+}
+.header-wrapper .header-container .buttons button:hover {
+  background-color: #F7FCFF;
+  color: #0B568C;
 }
 .header-wrapper .header-container .header-title {
   color: white;

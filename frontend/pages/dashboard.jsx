@@ -5,9 +5,9 @@ import EditUser from "@/components/dashboard/EditUser";
 import { logout } from "@/utils/doctorApi";
 import { useUser } from "@/context/UserContext";
 import SetAppointment from "@/components/dashboard/SetAppointment";
-import Invoice from "@/components/dashboard/Invoice";
 import { useRouter } from "next/router";
 import WritePrescription from "@/components/dashboard/WritePrescription";
+import Invoice from "@/components/dashboard/Invoice";
 
 const Dashboard = ({ appointments, doctors, patients, times, invoice }) => {
   const router = useRouter();
@@ -41,9 +41,10 @@ const Dashboard = ({ appointments, doctors, patients, times, invoice }) => {
                 <li onClick={() => setPageType("Appointments")}>
                   Appointments
                 </li>
-                <li onClick={() => setPageType("Invoice")}>Invoice</li>
+
                 {type == "patients" && (
                   <>
+                    <li onClick={() => setPageType("Invoice")}>Invoice</li>
                     <li onClick={() => setPageType("SetAppointment")}>
                       Set Appointment
                     </li>
@@ -83,7 +84,6 @@ const Dashboard = ({ appointments, doctors, patients, times, invoice }) => {
                     <h3>Name: {user.name}</h3>
                     <p>tc: {user.tc}</p>
                     {user.specialty && <p>specialty: {user.specialty}</p>}
-
                     <p>password: {user.password}</p>
                   </div>
                 </div>
@@ -101,24 +101,13 @@ const Dashboard = ({ appointments, doctors, patients, times, invoice }) => {
                 )}
                 {pageType == "EditProfile" && <EditUser />}
                 {pageType == "SetAppointment" && (
-                  <SetAppointment
-                    doctors={doctors}
-                    patients={patients}
-                    times={times}
-                  />
+                  <SetAppointment doctors={doctors} times={times} />
                 )}
-                {pageType == "Invoice" && (
-                  <Invoice
-                    invoice={invoice.filter((item) => {
-                      return type === "patients"
-                        ? item.patient.tc === user.tc
-                        : item.doctor.tc === user.tc;
-                    })}
-                    type={type}
-                  />
-                )}
+
+                {pageType == "Invoice" && <Invoice invoices={invoice} />}
+
                 {pageType == "WritePrescription" && (
-                  <WritePrescription user={user} patients={patients} />
+                  <WritePrescription patients={patients} />
                 )}
               </div>
             </div>
@@ -129,41 +118,23 @@ const Dashboard = ({ appointments, doctors, patients, times, invoice }) => {
   );
 };
 
+const getUrl = (type) => {
+  return `http://localhost:8080/${type}/all`;
+};
+
 export async function getServerSideProps(context) {
   try {
-    const dataAppointments = await fetch(
-      "http://localhost:8080/appointments/all",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    const dataDoctors = await fetch("http://localhost:8080/doctors/all", {
+    const options = {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-    });
-    const dataPatients = await fetch("http://localhost:8080/patients/all", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const dataTimes = await fetch("http://localhost:8080/times/all", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const dataInvoice = await fetch("http://localhost:8080/prescriptions/all", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    };
+    const dataAppointments = await fetch(getUrl("appointments"), options);
+    const dataDoctors = await fetch(getUrl("doctors"), options);
+    const dataPatients = await fetch(getUrl("patients"), options);
+    const dataTimes = await fetch(getUrl("times"), options);
+    const dataInvoice = await fetch(getUrl("invoices"), options);
     if (
       !dataAppointments.ok ||
       !dataDoctors.ok ||

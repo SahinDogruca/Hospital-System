@@ -1,20 +1,34 @@
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import TextField from "../TextField";
-import MyPagination from "./MyPagination";
+import MyPagination from "../MyPagination";
 import { useUser } from "@/context/UserContext";
+import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
+import { IconContext } from "react-icons";
+import ReactPaginate from "react-paginate";
 
-const SetAppointment = ({ appointments, doctors, patients, times }) => {
+const SetAppointment = ({ doctors, times }) => {
   const { user } = useUser();
   const [filteredTimes, setFilteredTimes] = useState(
     times.filter((time) => new Date(time.time) >= new Date())
   );
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentTimes, setCurrentTimes] = useState([]);
   const timesPerPage = 10;
-  const pageCount = Math.ceil(times.length / timesPerPage);
-  const [currentTimes, setCurrentTimes] = useState(
-    filteredTimes.slice(0, timesPerPage)
-  );
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    setPage(0);
+  }, [filteredTimes]);
+
+  useEffect(() => {
+    setCurrentTimes(
+      filteredTimes.filter((time, index) => {
+        return (
+          (index >= page * timesPerPage) & (index < (page + 1) * timesPerPage)
+        );
+      })
+    );
+  }, [page]);
 
   const getSpecialties = () => {
     const specialties = [];
@@ -31,31 +45,30 @@ const SetAppointment = ({ appointments, doctors, patients, times }) => {
   const getDates = () => {
     const dates = [];
     times.map((time) => {
-      if (
-        !dates.includes(
-          new Date(time.time).toLocaleDateString("tr-TR", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          })
-        )
-      ) {
-        dates.push(
-          new Date(time.time).toLocaleDateString("tr-TR", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric",
-          })
-        );
+      if (!dates.includes(new Date(time.time).toLocaleDateString())) {
+        dates.push(new Date(time.time).toLocaleDateString());
       }
     });
     const future = dates.filter((date) => new Date(date) >= new Date());
 
-    return future.map((date) => <option value={date} label={date} />);
+    return future.map((date) => (
+      <option
+        value={new Date(date).toLocaleDateString("tr-Tr", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })}
+        label={new Date(date).toLocaleDateString("tr-Tr", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        })}
+      />
+    ));
   };
 
   const handleSubmit = (values) => {
-    const nTimes = times.filter((time) => {
+    const nTimes = filteredTimes.filter((time) => {
       return (
         (values.doctor === "" || time.doctor.name === values.doctor) &&
         (values.specialty === "" ||
@@ -170,9 +183,14 @@ const SetAppointment = ({ appointments, doctors, patients, times }) => {
                     {getDates()}
                   </select>
 
-                  <button className="btn btn-primary m-3" type="submit">
-                    Set Appointment
+                  <button
+                    className="btn btn-primary m-3 text-center"
+                    type="submit"
+                  >
+                    filter
                   </button>
+
+                  <p>müsait saat sayısı: {filteredTimes.length}</p>
                 </Form>
               )}
             </Formik>
@@ -219,46 +237,30 @@ const SetAppointment = ({ appointments, doctors, patients, times }) => {
               </tbody>
             </table>
 
-            <nav>
-              <ul class="pagination">
-                <li class="page-item">
-                  <button
-                    class="page-link"
-                    onClick={() => {
-                      if (currentPage > 1) {
-                        setCurrentPage(currentPage - 1);
-                      }
-
-                      const indexOfLastTime = currentPage * timesPerPage;
-                      const indexOfFirstTime = indexOfLastTime - timesPerPage;
-                      setCurrentTimes(
-                        filteredTimes.slice(indexOfFirstTime, indexOfLastTime)
-                      );
-                    }}
+            <nav className="d-flex justify-content-center">
+              <ReactPaginate
+                containerClassName={"pagination"}
+                activeClassName={"active"}
+                pageClassName={"page-item"}
+                pageLinkClassName={"page-link"}
+                onPageChange={(event) => setPage(event.selected)}
+                breakLabel="..."
+                pageCount={Math.ceil(filteredTimes.length / timesPerPage)}
+                previousLabel={
+                  <IconContext.Provider
+                    value={{ color: "#B8C1CC", size: "36px" }}
                   >
-                    Previous
-                  </button>
-                </li>
-                <li class="page-item active" aria-current="page">
-                  <button class="page-link">{currentPage}</button>
-                </li>
-                <li class="page-item">
-                  <button
-                    class="page-link"
-                    onClick={() => {
-                      setCurrentPage(currentPage + 1);
-
-                      const indexOfLastTime = currentPage * timesPerPage;
-                      const indexOfFirstTime = indexOfLastTime - timesPerPage;
-                      setCurrentTimes(
-                        filteredTimes.slice(indexOfFirstTime, indexOfLastTime)
-                      );
-                    }}
+                    <AiFillLeftCircle />
+                  </IconContext.Provider>
+                }
+                nextLabel={
+                  <IconContext.Provider
+                    value={{ color: "#B8C1CC", size: "36px" }}
                   >
-                    Next
-                  </button>
-                </li>
-              </ul>
+                    <AiFillRightCircle />
+                  </IconContext.Provider>
+                }
+              />
             </nav>
           </div>
         </div>

@@ -37,14 +37,19 @@ const Header = () => {
         {isLogged ? (
           <div className="header-user">
             <h3 className="header-title">Welcome {user.name}</h3>
-            <div className="logout">
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
+            <div className="buttons">
+              <div>
+                <Link href="/dashboard">
+                  <button type="button" className="btn">
+                    Dashboard
+                  </button>
+                </Link>
+              </div>
+              <div className="logout">
+                <button type="button" className="btn" onClick={handleLogout}>
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
         ) : (

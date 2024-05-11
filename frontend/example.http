@@ -1,0 +1,16 @@
+GET http://localhost:8080/invoices/all
+
+###
+
+
+GET http://localhost:8080/prescriptions/all
+
+
+###
+
+GET http://localhost:8080/invoices/all
+
+
+###
+
+GET http://localhost:8080/patients/all
