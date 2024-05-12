@@ -3,7 +3,7 @@ import { UserProvider } from "@/context/UserContext.jsx";
 
 import Layout from "@/components/Layout";
 
-import "@/styles/styles.css";
+import "@/styles/styles-min.css";
 
 export default function App({ Component, pageProps }) {
   useEffect(() => {

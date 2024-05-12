@@ -11961,6 +11961,25 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+.link {
+  color: #0B568C;
+  text-decoration: none;
+  padding: 0.5rem;
+  border-radius: 5px;
+  transition: color 0.3s;
+  font-size: 1.6rem;
+  transition: all 0.3s;
+  text-align: center;
+}
+.link.logo {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 700;
+}
+.link:hover {
+  background-color: #0B568C;
+  color: #F7FCFF;
+}
+
 .header-wrapper {
   width: 100vw;
   height: 95vh;
@@ -12025,6 +12044,11 @@ textarea.form-control-lg {
   font-size: 2.4rem;
   color: #F7FCFF;
   background-color: #0B568C;
+  transition: all 0.3s;
+}
+.header-wrapper .header-container .links button:hover {
+  background-color: #F7FCFF;
+  color: #0B568C;
 }
 
 #aboutme {

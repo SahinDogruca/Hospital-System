@@ -8,8 +8,7 @@ import { useRouter } from "next/router";
 
 export default function App() {
   const router = useRouter();
-  const { user, setUser, isLogged, setIsLogged, userType, setUserType } =
-    useUser();
+  const { user, setUser, setIsLogged, userType, setUserType } = useUser();
 
   const validate = Yup.object({
     tc: Yup.string().required("TC required"),
@@ -33,9 +32,9 @@ export default function App() {
 
             if (loggedInUser && loggedInUser != {}) {
               localStorage.setItem("user", JSON.stringify(loggedInUser));
-              await setUser(loggedInUser);
-              await setIsLogged(true);
-              await setUserType(user.specialty ? "doctors" : "patients");
+              setUser(loggedInUser);
+              setIsLogged(true);
+              setUserType(user.specialty ? "doctors" : "patients");
               router.push("/dashboard");
             } else {
               console.log("User not found!");

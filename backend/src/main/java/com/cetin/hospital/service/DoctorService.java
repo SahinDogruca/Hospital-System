@@ -11,6 +11,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,15 @@ public class DoctorService {
     }
 
     public List<Doctor> getAllDoctors() {
-        return doctorRepository.findAll();
+        List<Doctor> doctors = doctorRepository.findAll();
+
+        List<Doctor> doctorList = new ArrayList<>();
+
+        for (Doctor doctor : doctors) {
+            doctorList.add(getDoctorById(doctor.getId()));
+        }
+
+        return doctorList;
     }
 
     public Doctor getDoctorById(Long doctorId) {
@@ -53,7 +62,7 @@ public class DoctorService {
     public Doctor createDoctor(DoctorRequest doctorRequest) {
         Doctor doctor = doctorRepository.findByTC(doctorRequest.getTC());
         Patient patient = patientRepository.findByTC(doctorRequest.getTC());
-        if (doctor != null && patient != null) throw new EntityExistsException("There is already a person with this TC.");
+        if (doctor != null || patient != null) throw new EntityExistsException("There is already a person with this TC.");
         doctor = Doctor.builder().
                 TC(doctorRequest.getTC()).
                 name(doctorRequest.getName()).

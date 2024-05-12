@@ -1,0 +1,21 @@
+.link {
+    color: $clr-blue;
+    text-decoration: none;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: color 0.3s;
+    
+    font-size: $fs-base;
+    transition: all 0.3s;
+    text-align: center;
+
+    &.logo {
+        font-family: $ff-mont;
+    font-weight: 700;
+    }
+
+    &:hover {
+        background-color: $clr-blue;
+        color: $clr-light;
+    }
+}

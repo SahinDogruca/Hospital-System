@@ -1,140 +1,118 @@
-import React, { useState, useEffect } from "react";
-import { Formik, Form, ErrorMessage } from "formik";
-import TextField from "../components/TextField";
-import * as Yup from "yup";
-import { register } from "../utils/authApi";
-import { useUser } from "../context/UserContext";
+import { register } from "@/utils/authApi";
+import React, { useState } from "react";
+import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/router";
 
-export default function App() {
+const Register = () => {
   const router = useRouter();
-  const [setUser, setUserType, setIsLogged] = useUser();
+  const { user, setUser, setIsLogged, userType, setUserType } = useUser();
+  const [type, setType] = useState("patients");
+  const [tc, setTc] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [specialty, setSpecialty] = useState("");
 
-  const validate = Yup.object({
-    tc: Yup.string().required("TC required"),
-    name: Yup.string().required("Name Required!"),
-    specialty: Yup.string().when("type", {
-      is: "doctors",
-      then: Yup.string().required("Specialty Required!"),
-    }),
-    password: Yup.string()
-      .min(4, "Password must be minimum 4 digits!")
-      .required("Password Required!"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], "Password must match!")
-      .required("Confirm password is required!"),
-  });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let user = {
+      tc,
+      password,
+      name,
+    };
+
+    if (type === "doctors") {
+      user.specialty = specialty;
+    }
+
+    const resBody = await register(user, type);
+
+    console.log(resBody);
+
+    if (resBody) {
+      setUser(resBody);
+      setIsLogged(true);
+      setUserType(user.specialty ? "doctors" : "patients");
+      router.push("/dashboard");
+    }
+  };
+
+  const handleReset = () => {
+    setTc("");
+    setPassword("");
+    setName("");
+    setSpecialty("");
+  };
 
   return (
-    <div className="container">
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validate}
-        onSubmit={(values) => {
-          let newUser = {
-            name: values.name,
-            tc: values.tc,
-            specialty: values.specialty,
-            password: values.password,
-          };
-          register(newUser, values.type);
+    <div className="container my-5">
+      <h1 className="text-center">Register</h1>
+      <form className="w-50 m-auto" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="exampleFormControlSelect1">Type</label>
+          <select
+            className="form-control"
+            id="exampleFormControlSelect1"
+            onChange={(e) => setType(e.target.value)}
+          >
+            <option value="patients">Patients</option>
+            <option value="doctors">Doctors</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label htmlFor="exampleInputEmail1">TC</label>
+          <input
+            type="text"
+            onChange={(e) => setTc(e.target.value)}
+            className="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="exampleInputEmail1">Name</label>
+          <input
+            type="text"
+            onChange={(e) => setName(e.target.value)}
+            className="form-control"
+            id="exampleInputEmail1"
+            aria-describedby="emailHelp"
+          />
+        </div>
 
-          setUser(newUser);
-          setIsLogged(true);
-          setUserType(values.type);
-
-          localStorage.setItem("user", JSON.stringify(newUser));
-
-          router.push("/dashboard");
-        }}
-      >
-        {(formik) => (
-          <div>
-            <h1 className="text-center">Signup</h1>
-            <Form className="form p-3 register">
-              <select
-                className="form-select"
-                name="userType"
-                defaultValue={formik.values.type}
-                onChange={(e) => {
-                  setUserType(e.target.value);
-                  formik.handleChange(e);
-                }}
-                onBlur={formik.handleBlur}
-                style={{ display: "block" }}
-              >
-                <option value="patients" label="Kullanıcı" />
-                <option value="doctors" label="Doktor" />
-              </select>
-              <TextField
-                type="text"
-                label="TC"
-                name="tc"
-                placeholder="21773214838"
-              />
-
-              <TextField
-                type="text"
-                name="name"
-                label="Name"
-                placeholder="Şahin"
-              />
-              {formik.values.userType === "doctors" && (
-                <TextField
-                  type="text"
-                  name="specialty"
-                  label="Specialty"
-                  placeholder="Kulak"
-                />
-              )}
-
-              <TextField
-                type="text"
-                name="password"
-                label="Password"
-                placeholder="qwert@123"
-              />
-
-              <div className="mb-2">
-                <label htmlFor="confirmPassword">Confirm Password</label>
-                <input
-                  id="confirmPassword"
-                  className={`form-control shadow-none ${
-                    formik.touched.confirmPassword &&
-                    formik.errors.confirmPassword &&
-                    "is-invalid"
-                  }`}
-                  type="text"
-                  name="confirmPassword"
-                  placeholder="Confirm password..."
-                  {...formik.getFieldProps("confirmPassword")}
-                />
-                <ErrorMessage
-                  component="div"
-                  name="confirmPassword"
-                  className="error"
-                />
-              </div>
-
-              <button className="btn btn-primary m-3" type="submit">
-                Register
-              </button>
-              <button className="btn btn-dark m-3" type="reset">
-                Reset
-              </button>
-            </Form>
+        {type === "doctors" && (
+          <div className="form-group">
+            <label htmlFor="exampleInputName1">Specialty</label>
+            <input
+              onChange={(e) => setSpecialty(e.target.value)}
+              type="text"
+              className="form-control"
+              id="exampleInputName1"
+            />
           </div>
         )}
-      </Formik>
+        <div className="form-group">
+          <label htmlFor="exampleInputPassword1">Password</label>
+          <input
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            className="form-control"
+            id="exampleInputPassword1"
+          />
+        </div>
+        <button type="submit" className="btn btn-primary mt-3">
+          Register
+        </button>
+        <button
+          type="button"
+          className="ms-3 btn btn-danger mt-3"
+          onClick={handleReset}
+        >
+          Reset
+        </button>
+      </form>
     </div>
   );
-}
-
-const initialValues = {
-  userType: "patients",
-  tc: "",
-  name: "",
-  specialty: "",
-  password: "",
-  confirmPassword: "",
 };
+
+export default Register;

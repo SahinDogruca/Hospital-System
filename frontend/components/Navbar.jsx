@@ -5,7 +5,7 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-md">
       <div className="container">
-        <Link className="navbar-brand" href="/">
+        <Link className="navbar-brand link" href="/">
           HOSPITAL
         </Link>
 
@@ -27,17 +27,21 @@ const Navbar = () => {
         >
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" href="/">
+              <Link
+                className="nav-link active link logo me-2"
+                aria-current="page"
+                href="/"
+              >
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/personals">
+              <Link className="nav-link link me-2" href="/personals">
                 Personals
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/contact">
+              <Link className="nav-link link me-2" href="/contact">
                 Contact
               </Link>
             </li>

@@ -7,12 +7,12 @@ const Links = () => {
   return (
     <div className="links">
       <Link href="/login">
-        <button type="button" className="btn btn-primary">
+        <button type="button" className="btn  link">
           Login
         </button>
       </Link>
       <Link href="/register">
-        <button type="button" className="btn">
+        <button type="button" className="btn link">
           Sign up
         </button>
       </Link>
@@ -40,13 +40,17 @@ const Header = () => {
             <div className="buttons">
               <div>
                 <Link href="/dashboard">
-                  <button type="button" className="btn">
+                  <button type="button" className="btn link">
                     Dashboard
                   </button>
                 </Link>
               </div>
               <div className="logout">
-                <button type="button" className="btn" onClick={handleLogout}>
+                <button
+                  type="button"
+                  className="btn link"
+                  onClick={handleLogout}
+                >
                   Logout
                 </button>
               </div>

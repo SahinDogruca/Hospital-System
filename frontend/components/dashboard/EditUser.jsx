@@ -76,13 +76,13 @@ const EditUser = () => {
                 type="password"
                 label="Password"
                 name="password"
-                initialValue={user.password}
+                initialvalue={user.password}
               />
               <TextField
                 type="password"
                 label="Confirm Password"
                 name="confirmPassword"
-                initialValue={user.password}
+                initialvalue={user.password}
               />
               <ErrorMessage
                 name="confirmPassword"

@@ -71,6 +71,12 @@
                 font-size: $fs-sub;
                 color: $clr-light;
                 background-color: $clr-blue;
+                transition: all 0.3s;
+
+                &:hover {
+                    background-color: $clr-light;
+                    color: $clr-blue;
+                }
             }
 
         }

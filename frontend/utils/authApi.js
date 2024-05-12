@@ -60,7 +60,7 @@ export async function register(user, type) {
 
     const data = await res.json();
     console.log(data);
-    loginUserById(data.id, type);
+    return loginUserById(data.id, type);
   } catch (error) {
     console.error("Error:", error);
   }

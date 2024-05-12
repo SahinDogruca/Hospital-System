@@ -5,7 +5,6 @@ import com.cetin.hospital.model.Time;
 import com.cetin.hospital.repository.DoctorRepository;
 import com.cetin.hospital.repository.TimeRepository;
 import com.cetin.hospital.request.TimeRequest;
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +28,14 @@ public class TimeService {
     }
 
     public List<Time> getAllTimes() {
-        return timeRepository.findAll();
+        List<Doctor> doctors = doctorRepository.findAll();
+
+        List<Time> times = new ArrayList<>();
+
+        for (Doctor doctor : doctors) {
+            times.addAll(getTimesByDoctorId(doctor.getId()));
+        }
+        return times;
     }
 
     @Transactional

@@ -14,9 +14,9 @@ const Layout = ({ children }) => {
       if (localUser) {
         try {
           const user = JSON.parse(localUser);
-          await setUser(user);
-          await setIsLogged(true);
-          await setUserType(user.specialty ? "doctors" : "patients");
+          setUser(user);
+          setIsLogged(true);
+          setUserType(user.specialty ? "doctors" : "patients");
         } catch (error) {
           console.error("Error parsing user data:", error);
         }
