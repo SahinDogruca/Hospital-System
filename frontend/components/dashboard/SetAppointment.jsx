@@ -11,12 +11,20 @@ const SetAppointment = ({ doctors, times }) => {
   const { user } = useUser();
   const [filteredTimes, setFilteredTimes] = useState(
     times.filter((time) => {
-      return new Date(time.time) >= new Date();
+      return new Date(time.time) >= new Date() && time.status === false;
     })
   );
   const [currentTimes, setCurrentTimes] = useState([]);
   const timesPerPage = 10;
   const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    setFilteredTimes(
+      times.filter((time) => {
+        return new Date(time.time) >= new Date() && time.status === false;
+      })
+    );
+  }, []);
 
   useEffect(() => {
     setPage(0);
