@@ -9,7 +9,6 @@ const EditUser = () => {
   const { user, setUser } = useUser();
   const [type, setType] = useState("patients");
   const [initialValues, setInitialValues] = useState({
-    type: "patients",
     tc: "",
     name: "",
     specialty: "",
@@ -37,7 +36,6 @@ const EditUser = () => {
 
     // Initialize the initial values object based on user data
     setInitialValues({
-      type: user.specialty ? "doctors" : "patients",
       tc: user.tc || "",
       name: user.name || "",
       specialty: user.specialty || "",
@@ -74,21 +72,6 @@ const EditUser = () => {
           <div>
             <h1 className="text-center content__title">Edit Profile</h1>
             <Form className="form p-3">
-              <select
-                className="form-select"
-                name="type"
-                value={formik.values.type}
-                onChange={(e) => {
-                  setType(e.target.value);
-                  formik.setFieldValue("type", e.target.value);
-                }}
-                onBlur={formik.handleBlur}
-                style={{ display: "block" }}
-              >
-                <option value="patients">Patient</option>
-                <option value="doctors">Doctor</option>
-              </select>
-
               <TextField type="text" label="TC" name="tc" />
               <TextField type="text" label="Name" name="name" />
               {type === "doctors" && (

@@ -5,47 +5,52 @@ import * as Yup from "yup";
 import { register } from "../utils/doctorApi";
 import { useUser } from "../context/UserContext";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function App() {
   const router = useRouter();
+  const { user, setUser, isLogged, setIsLogged } = useUser();
   const [type, setType] = useState("patients");
 
   const validate = Yup.object({
-    tc: Yup.string().required("tc required"),
-    name: Yup.string().required("name Required!"),
-    specialty: Yup.string().required("specialty required"),
+    tc: Yup.string().required("TC required"),
+    name: Yup.string().required("Name Required!"),
+    specialty:
+      type === "doctors"
+        ? Yup.string().required("Specialty required")
+        : Yup.string(),
     password: Yup.string()
       .min(4, "Password must be minimum 4 digits!")
       .required("Password Required!"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Password must match!")
-      .required("Confirm password is reqired!"),
+      .required("Confirm password is required!"),
   });
-
-  const { user, setUser, isLogged, setIsLogged } = useUser();
 
   return (
     <div className="container">
       <Formik
         initialValues={initialValues}
         validationSchema={validate}
-        onSubmit={(values) => {
-          let user = {
-            name: values.name,
-            tc: values.tc,
-            specialty: values.specialty,
-            password: values.password,
-          };
-          console.log(values.type);
-          const res = register(user, values.type);
+        onSubmit={async (values) => {
+          try {
+            const user = {
+              name: values.name,
+              tc: values.tc,
+              specialty: values.specialty,
+              password: values.password,
+            };
+            console.log(type);
+            const res = await register(user, type); // Pass the type to the register function
 
-          setUser(user);
-          setIsLogged(true);
+            if (res) {
+              await setUser(user);
+              await setIsLogged(true);
 
-          if (res.status === 400) {
-            alert("User already exists!");
-          } else {
-            router.push("/dashboard");
+              router.push("/dashboard");
+            }
+          } catch (error) {
+            alert("User cannot be registered!");
           }
         }}
       >
@@ -71,14 +76,14 @@ export default function App() {
                 type="text"
                 label="TC"
                 name="tc"
-                placeholder="21773214838"
+                placeholder="123456789"
               />
 
               <TextField
                 type="text"
                 name="name"
                 label="Name"
-                placeholder="Şahin"
+                placeholder="John Doe"
               />
               {type === "doctors" && (
                 <TextField
@@ -117,12 +122,24 @@ export default function App() {
                 />
               </div>
 
-              <button className="btn btn-primary m-3" type="submit">
-                Register
-              </button>
-              <button className="btn btn-dark m-3" type="reset">
-                Reset
-              </button>
+              <div className="d-flex justify-content-center align-items-center">
+                <button className="btn btn-primary m-3" type="submit">
+                  Login
+                </button>
+
+                <button className="btn btn-dark m-3" type="reset">
+                  Reset
+                </button>
+
+                <button type="button" className="btn btn-warning">
+                  <Link
+                    href="/login"
+                    style={{ textDecoration: "none", color: "#fff" }}
+                  >
+                    Go to Login
+                  </Link>
+                </button>
+              </div>
             </Form>
           </div>
         )}

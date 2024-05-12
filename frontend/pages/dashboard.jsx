@@ -90,8 +90,6 @@ const Dashboard = ({ appointments, doctors, patients, times, invoices }) => {
                     <h3>Name: {user.name}</h3>
                     <p>tc: {user.tc}</p>
                     {user.specialty && <p>specialty: {user.specialty}</p>}
-
-                    <p>password: {user.password}</p>
                   </div>
                 </div>
               </div>

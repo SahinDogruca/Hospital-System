@@ -5,7 +5,7 @@ import { IconContext } from "react-icons";
 import ReactPaginate from "react-paginate";
 import { useUser } from "@/context/UserContext";
 
-const SetAppointment = ({ appointments, doctors, patients, times }) => {
+const SetAppointment = ({ doctors, times }) => {
   const { user } = useUser();
   const [filteredTimes, setFilteredTimes] = useState(
     times.filter((time) => {
@@ -28,7 +28,7 @@ const SetAppointment = ({ appointments, doctors, patients, times }) => {
         );
       })
     );
-  }, [page]);
+  }, [page, filteredTimes]);
 
   const getSpecialties = () => {
     const specialties = [];
@@ -68,7 +68,7 @@ const SetAppointment = ({ appointments, doctors, patients, times }) => {
     ));
   };
 
-  const handleSubmit = (values) => {
+  const filterTimes = (values) => {
     const nTimes = times.filter((time) => {
       return (
         (time.doctor.name === values.doctor || values.doctor === "") &&
@@ -89,6 +89,10 @@ const SetAppointment = ({ appointments, doctors, patients, times }) => {
     setFilteredTimes(nTimes);
   };
 
+  const handleSubmit = (values) => {
+    filterTimes(values);
+  };
+
   const handleSet = async (e, patientId, doctorId, timeId) => {
     e.preventDefault();
     const appointment = {
@@ -107,6 +111,10 @@ const SetAppointment = ({ appointments, doctors, patients, times }) => {
 
     if (res.status === 200) {
       alert("Appointment set successfully!");
+
+      setFilteredTimes(filteredTimes.filter((time) => time.id !== timeId));
+    } else {
+      alert("appointment can't set");
     }
   };
 
@@ -202,8 +210,8 @@ const SetAppointment = ({ appointments, doctors, patients, times }) => {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
                   <th scope="col">Doctor Name</th>
+                  <th scope="col">Specialty</th>
                   <th scope="col">Date</th>
                   <th scope="col">Time</th>
                   <th scope="col">Set</th>
@@ -212,8 +220,8 @@ const SetAppointment = ({ appointments, doctors, patients, times }) => {
               <tbody>
                 {currentTimes.map((time) => (
                   <tr>
-                    <th scope="row">{time.id}</th>
                     <td>{time.doctor.name}</td>
+                    <td>{time.doctor.specialty}</td>
                     <td>
                       {new Date(time.time).toLocaleDateString("tr-TR", {
                         day: "2-digit",

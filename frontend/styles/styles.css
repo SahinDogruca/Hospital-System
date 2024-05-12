@@ -12136,7 +12136,7 @@ textarea.form-control-lg {
 }
 
 form.register, form.login {
-  width: 40%;
+  width: 60%;
   margin: auto;
   height: 80vh;
 }
@@ -12146,6 +12146,11 @@ form.register .error, form.login .error {
   font-size: 0.6rem;
 }
 
+@media (max-width: 768px) {
+  form.register, form.login {
+    width: 90%;
+  }
+}
 .personals {
   padding: 5rem 0;
 }

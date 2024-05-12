@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { login } from "../utils/doctorApi";
 import { useUser } from "../context/UserContext";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function App() {
   const router = useRouter();
@@ -83,6 +84,14 @@ export default function App() {
 
                 <button className="btn btn-dark m-3" type="reset">
                   Reset
+                </button>
+                <button type="button" className="btn btn-warning">
+                  <Link
+                    href="/register"
+                    style={{ textDecoration: "none", color: "#fff" }}
+                  >
+                    Go to Register
+                  </Link>
                 </button>
               </div>
             </Form>
