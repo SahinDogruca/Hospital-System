@@ -8,12 +8,21 @@ import SetAppointment from "@/components/dashboard/SetAppointment";
 import Invoice from "@/components/dashboard/Invoice";
 import { useRouter } from "next/router";
 import WritePrescription from "@/components/dashboard/WritePrescription";
+import { useDashboard } from "@/context/DashboardContext";
 
-const Dashboard = ({ appointments, doctors, patients, times, invoices }) => {
+const Dashboard = ({
+  appointments,
+  doctors,
+  patients,
+  times,
+  invoices,
+  prescriptions,
+}) => {
   const router = useRouter();
   const { user, setUser, setIsLogged } = useUser();
   const [pageType, setPageType] = useState("Appointments");
   const [type, setType] = useState(user?.specialty ? "doctors" : "patients");
+  const { contextAppointments, setContextAppointments } = useDashboard();
 
   useEffect(() => {
     if (!user) {
@@ -23,6 +32,10 @@ const Dashboard = ({ appointments, doctors, patients, times, invoices }) => {
     setType(user.specialty ? "doctors" : "patients");
     console.log(type);
   }, [user]);
+
+  useEffect(() => {
+    setContextAppointments(appointments);
+  }, []);
 
   return (
     <section id="dashboard" className="dashboard">
@@ -96,7 +109,7 @@ const Dashboard = ({ appointments, doctors, patients, times, invoices }) => {
               <div className="content mt-2">
                 {pageType == "Appointments" && (
                   <Appointments
-                    appointments={appointments.filter((appointment) => {
+                    appointments={contextAppointments.filter((appointment) => {
                       return type === "patients"
                         ? appointment.patient.id === user.id
                         : appointment.time.doctor.id === user.id;
@@ -206,6 +219,7 @@ export async function getServerSideProps(context) {
         patients: [],
         times: [],
         invoice: [],
+        prescriptions: [],
       },
     };
   }

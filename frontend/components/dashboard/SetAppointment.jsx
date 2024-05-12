@@ -4,8 +4,10 @@ import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import ReactPaginate from "react-paginate";
 import { useUser } from "@/context/UserContext";
+import { useDashboard } from "@/context/DashboardContext";
 
 const SetAppointment = ({ doctors, times }) => {
+  const { contextAppointments, setContextAppointments } = useDashboard();
   const { user } = useUser();
   const [filteredTimes, setFilteredTimes] = useState(
     times.filter((time) => {
@@ -111,6 +113,9 @@ const SetAppointment = ({ doctors, times }) => {
 
     if (res.status === 200) {
       alert("Appointment set successfully!");
+      const appointment = await res.json();
+
+      setContextAppointments([...contextAppointments, appointment]);
 
       setFilteredTimes(filteredTimes.filter((time) => time.id !== timeId));
     } else {

@@ -14,31 +14,36 @@ const Invoice = ({ invoices }) => {
           </tr>
         </thead>
         <tbody>
-          {invoices.map((invoice, index) => (
-            <tr key={index}>
-              <td scope="row">{index + 1}</td>
-              <td>{invoice.prescription.doctor.name}</td>
-              <td>{invoice.amount}</td>
-              <td>{invoice.dueDate}</td>
-
-              <td>
-                <button
-                  type="button"
-                  className="btn btn-primary"
-                  onClick={() => {
-                    let text = "drugs : \n";
-                    invoice.prescription.drugs.forEach((drug) => {
-                      text += `${drug.name} : ${drug.price} \n`;
-                    });
-
-                    alert(text);
-                  }}
-                >
-                  Pay
-                </button>
-              </td>
-            </tr>
-          ))}
+          {invoices &&
+            invoices.map((invoice, index) => (
+              <tr key={index}>
+                <td scope="row">{index + 1}</td>
+                <td>
+                  {invoice.prescription ? invoice.prescription.doctor.name : ""}
+                </td>
+                <td>{invoice.amount}</td>
+                <td>{invoice.dueDate}</td>
+                <td>
+                  <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={() => {
+                      if (invoice.prescription) {
+                        let text = "drugs : \n";
+                        invoice.prescription.drugs.forEach((drug) => {
+                          text += `${drug.name} : ${drug.price} \n`;
+                        });
+                        alert(text);
+                      } else {
+                        alert("Prescription not available for this invoice.");
+                      }
+                    }}
+                  >
+                    Pay
+                  </button>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </>

@@ -1,6 +1,8 @@
 import React from "react";
+import { useUser } from "@/context/UserContext";
 
-const WritePrescription = ({ user, patients }) => {
+const WritePrescription = ({ patients }) => {
+  const { user } = useUser();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -32,6 +34,8 @@ const WritePrescription = ({ user, patients }) => {
 
     if (res.ok) {
       alert("Prescription written successfully");
+    } else {
+      alert("Error writing prescription");
     }
   };
   return (

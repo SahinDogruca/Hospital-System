@@ -124,7 +124,7 @@ export default function App() {
 
               <div className="d-flex justify-content-center align-items-center">
                 <button className="btn btn-primary m-3" type="submit">
-                  Login
+                  Register
                 </button>
 
                 <button className="btn btn-dark m-3" type="reset">

@@ -4,6 +4,7 @@ import { UserProvider } from "@/context/UserContext.jsx";
 import Layout from "@/components/Layout";
 
 import "@/styles/styles.css";
+import { DashboardProvider } from "@/context/DashboardContext.jsx";
 
 export default function App({ Component, pageProps }) {
   useEffect(() => {
@@ -11,9 +12,11 @@ export default function App({ Component, pageProps }) {
   }, []);
   return (
     <UserProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <DashboardProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </DashboardProvider>
     </UserProvider>
   );
 }

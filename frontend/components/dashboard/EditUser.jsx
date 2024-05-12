@@ -96,7 +96,7 @@ const EditUser = () => {
               />
 
               <button className="btn btn-primary m-3" type="submit">
-                Register
+                Save
               </button>
               <button className="btn btn-dark m-3" type="reset">
                 Reset
