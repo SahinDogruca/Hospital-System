@@ -23,6 +23,7 @@ export async function login(tc, password, type) {
     }
   } catch (error) {
     console.error("Error:", error);
+    return {};
   }
 }
 

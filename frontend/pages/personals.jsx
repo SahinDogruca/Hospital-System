@@ -1,3 +1,4 @@
+import { getAll } from "@/utils/db";
 import React from "react";
 
 const Personals = ({ doctors }) => {
@@ -31,18 +32,7 @@ export default Personals;
 
 export const getServerSideProps = async (context) => {
   try {
-    const response = await fetch("http://localhost:8080/doctors/all", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch doctors data");
-    }
-
-    const doctors = await response.json();
+    const doctors = await getAll("doctors");
 
     return {
       props: {

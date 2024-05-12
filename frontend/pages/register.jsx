@@ -2,27 +2,28 @@ import React, { useState, useEffect } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import TextField from "../components/TextField";
 import * as Yup from "yup";
-import { register } from "../utils/doctorApi";
+import { register } from "../utils/authApi";
 import { useUser } from "../context/UserContext";
 import { useRouter } from "next/router";
 
 export default function App() {
   const router = useRouter();
-  const [type, setType] = useState("patients");
+  const [setUser, setUserType, setIsLogged] = useUser();
 
   const validate = Yup.object({
-    tc: Yup.string().required("tc required"),
-    name: Yup.string().required("name Required!"),
-    specialty: Yup.string().required("specialty required"),
+    tc: Yup.string().required("TC required"),
+    name: Yup.string().required("Name Required!"),
+    specialty: Yup.string().when("type", {
+      is: "doctors",
+      then: Yup.string().required("Specialty Required!"),
+    }),
     password: Yup.string()
       .min(4, "Password must be minimum 4 digits!")
       .required("Password Required!"),
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password"), null], "Password must match!")
-      .required("Confirm password is reqired!"),
+      .required("Confirm password is required!"),
   });
-
-  const { user, setUser, isLogged, setIsLogged } = useUser();
 
   return (
     <div className="container">
@@ -30,16 +31,19 @@ export default function App() {
         initialValues={initialValues}
         validationSchema={validate}
         onSubmit={(values) => {
-          let user = {
+          let newUser = {
             name: values.name,
             tc: values.tc,
             specialty: values.specialty,
             password: values.password,
           };
-          register(user, values.type);
+          register(newUser, values.type);
 
-          setUser(user);
+          setUser(newUser);
           setIsLogged(true);
+          setUserType(values.type);
+
+          localStorage.setItem("user", JSON.stringify(newUser));
 
           router.push("/dashboard");
         }}
@@ -50,10 +54,10 @@ export default function App() {
             <Form className="form p-3 register">
               <select
                 className="form-select"
-                name="colors"
+                name="userType"
                 defaultValue={formik.values.type}
                 onChange={(e) => {
-                  setType(e.target.value);
+                  setUserType(e.target.value);
                   formik.handleChange(e);
                 }}
                 onBlur={formik.handleBlur}
@@ -75,12 +79,12 @@ export default function App() {
                 label="Name"
                 placeholder="Şahin"
               />
-              {type === "doctors" && (
+              {formik.values.userType === "doctors" && (
                 <TextField
                   type="text"
                   name="specialty"
                   label="Specialty"
-                  placeholder="kulak"
+                  placeholder="Kulak"
                 />
               )}
 
@@ -102,7 +106,7 @@ export default function App() {
                   }`}
                   type="text"
                   name="confirmPassword"
-                  placeholder="confirm password..."
+                  placeholder="Confirm password..."
                   {...formik.getFieldProps("confirmPassword")}
                 />
                 <ErrorMessage
@@ -127,7 +131,7 @@ export default function App() {
 }
 
 const initialValues = {
-  type: "patients",
+  userType: "patients",
   tc: "",
   name: "",
   specialty: "",

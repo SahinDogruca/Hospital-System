@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { useUser } from "../context/UserContext";
-import { logout } from "../utils/doctorApi";
+import { logout } from "../utils/authApi";
 
 const Links = () => {
   return (

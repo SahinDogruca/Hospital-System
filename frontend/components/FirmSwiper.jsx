@@ -1,6 +1,7 @@
 // import Swiper core and required modules
-import { Navigation, Pagination, Scrollbar, A11y } from "swiper/modules";
+import { Navigation, Pagination, A11y } from "swiper/modules";
 import { SiSamsung } from "react-icons/si";
+import { DiAndroid, DiApple, DiWindows, DiChrome } from "react-icons/di";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
@@ -36,25 +37,25 @@ export default () => {
       loop={true}
     >
       <SwiperSlide>
-        <SiSamsung className="firm-icon" />
+        <SiSamsung />
       </SwiperSlide>
       <SwiperSlide>
-        <SiSamsung className="firm-icon" />
+        <DiAndroid />
       </SwiperSlide>
       <SwiperSlide>
-        <SiSamsung className="firm-icon" />
+        <DiApple />
       </SwiperSlide>
       <SwiperSlide>
-        <SiSamsung className="firm-icon" />
+        <DiWindows />
       </SwiperSlide>
       <SwiperSlide>
-        <SiSamsung className="firm-icon" />
+        <DiChrome />
       </SwiperSlide>
       <SwiperSlide>
-        <SiSamsung className="firm-icon" />
+        <SiSamsung />
       </SwiperSlide>
       <SwiperSlide>
-        <SiSamsung className="firm-icon" />
+        <SiSamsung />
       </SwiperSlide>
     </Swiper>
   );

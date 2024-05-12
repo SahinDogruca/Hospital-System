@@ -1,5 +1,6 @@
 import React from "react";
 import { useUser } from "@/context/UserContext";
+import { create } from "@/utils/db";
 
 const WritePrescription = ({ patients }) => {
   const { user } = useUser();
@@ -14,27 +15,15 @@ const WritePrescription = ({ patients }) => {
       (patient) => patient.tc === e.target.patient.value
     );
 
-    console.log({
+    const prescription = {
       doctorId,
       patientId: patient.id,
       drugNames: drugsList,
-    });
+    };
 
-    const res = await fetch("http://localhost:8080/prescriptions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        doctorId,
-        patientId: patient.id,
-        drugNames: drugsList,
-      }),
-    });
+    const res = await create("prescriptions", prescription);
 
-    if (res.ok) {
-      alert("Prescription written successfully");
-    }
+    console.log(res);
   };
   return (
     <div>

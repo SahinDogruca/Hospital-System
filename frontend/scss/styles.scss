@@ -72,4 +72,11 @@
 @import "personals";
 @import "contact";
 @import "dashboard";
-@import "paginate";
+
+
+
+@media screen and (max-width: 576px) {
+    html {
+        font-size: 14px;
+    }
+}

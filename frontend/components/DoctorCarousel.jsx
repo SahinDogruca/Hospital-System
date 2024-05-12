@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import DoctorSwiper from "./DoctorSwiper";
 
-const DoctorCarousel = () => {
+const DoctorCarousel = ({ doctors }) => {
   return (
     <section id="doctor-carousel">
       <div className="container">
-        <DoctorSwiper />
+        <DoctorSwiper doctors={doctors} />
       </div>
     </section>
   );

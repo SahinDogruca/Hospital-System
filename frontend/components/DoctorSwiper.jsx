@@ -9,7 +9,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 
-export default () => {
+export default ({ doctors }) => {
   return (
     <Swiper
       // install Swiper modules
@@ -32,118 +32,23 @@ export default () => {
       navigation
       pagination={{ clickable: true }}
     >
-      <SwiperSlide>
-        <div className="card">
-          <img
-            src="https://picsum.photos/200/300"
-            className="card-img-top"
-            alt="..."
-          ></img>
-          <div className="card-body">
-            <h5 className="card-title">Card title</h5>
-            <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
+      {doctors.map((doctor) => (
+        <SwiperSlide key={doctor.id}>
+          <div className="card">
+            <img
+              src="https://picsum.photos/200/300"
+              className="card-img-top"
+              alt={doctor.name}
+            ></img>
+            <div className="card-body">
+              <h5 className="card-title">Dr. {doctor.name}</h5>
+              <p className="card-text">
+                specialty: {doctor.specialty} <br />
+              </p>
+            </div>
           </div>
-        </div>
-      </SwiperSlide>
-      <SwiperSlide>
-        <div className="card">
-          <img
-            src="https://picsum.photos/200/300"
-            className="card-img-top"
-            alt="..."
-          ></img>
-          <div className="card-body">
-            <h5 className="card-title">Card title</h5>
-            <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-          </div>
-        </div>
-      </SwiperSlide>
-      <SwiperSlide>
-        <div className="card">
-          <img
-            src="https://picsum.photos/200/300"
-            className="card-img-top"
-            alt="..."
-          ></img>
-          <div className="card-body">
-            <h5 className="card-title">Card title</h5>
-            <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-          </div>
-        </div>
-      </SwiperSlide>
-      <SwiperSlide>
-        <div className="card">
-          <img
-            src="https://picsum.photos/200/300"
-            className="card-img-top"
-            alt="..."
-          ></img>
-          <div className="card-body">
-            <h5 className="card-title">Card title</h5>
-            <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-          </div>
-        </div>
-      </SwiperSlide>
-      <SwiperSlide>
-        <div className="card">
-          <img
-            src="https://picsum.photos/200/300"
-            className="card-img-top"
-            alt="..."
-          ></img>
-          <div className="card-body">
-            <h5 className="card-title">Card title</h5>
-            <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-          </div>
-        </div>
-      </SwiperSlide>
-      <SwiperSlide>
-        <div className="card">
-          <img
-            src="https://picsum.photos/200/300"
-            className="card-img-top"
-            alt="..."
-          ></img>
-          <div className="card-body">
-            <h5 className="card-title">Card title</h5>
-            <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-          </div>
-        </div>
-      </SwiperSlide>
-      <SwiperSlide>
-        <div className="card">
-          <img
-            src="https://picsum.photos/200/300"
-            className="card-img-top"
-            alt="..."
-          ></img>
-          <div className="card-body">
-            <h5 className="card-title">Card title</h5>
-            <p className="card-text">
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
-            </p>
-          </div>
-        </div>
-      </SwiperSlide>
+        </SwiperSlide>
+      ))}
     </Swiper>
   );
 };

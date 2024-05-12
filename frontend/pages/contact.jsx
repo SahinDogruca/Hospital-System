@@ -6,8 +6,8 @@ const Contact = () => {
     <section className="contact">
       <div className="container">
         <h2 className="contact__title">Contact</h2>
-        <div className="row">
-          <div className="col-md-6 col">
+        <div className="flex-column row flex-md-row align-items-center">
+          <div className="col-sm-6 col">
             <form action="#" className="contact__form">
               <div className="form-group my-2">
                 <label htmlFor="name" className="form-label">
@@ -32,7 +32,7 @@ const Contact = () => {
               </button>
             </form>
           </div>
-          <div className="col-md-6 col">
+          <div className="col-sm-6 col">
             <div className="contact__info">
               <h3 className="contact__info-title">Contact Info</h3>
               <div className="contact__info-item">

@@ -1,12 +1,11 @@
 import React from "react";
-import Image from "next/image";
 
 const Aboutme = () => {
   return (
     <section id="aboutme">
       <div className="container">
         <div className="row">
-          <div className="col-md-6 col aboutme__left">
+          <div className="col-lg-6 col aboutme__left">
             <h1 className="aboutme__title">
               ATLAS UNIVERSITESI MEDICANA HASTANESI
             </h1>
@@ -21,15 +20,14 @@ const Aboutme = () => {
               officia tempore magnam.
             </p>
           </div>
-          <div className="col-md-6 col aboutme__right">
+          <div className="col-lg-6 col aboutme__right mt-5">
             <div className="aboutme-img__wrapper">
-              <Image
+              <img
                 className="aboutme-img__image rounded-circle"
                 src="/assets/aboutme.jpg"
-                alt=""
                 width={400}
                 height={500}
-              ></Image>
+              ></img>
             </div>
           </div>
         </div>

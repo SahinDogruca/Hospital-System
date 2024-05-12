@@ -12093,11 +12093,22 @@ textarea.form-control-lg {
   font-weight: bold;
 }
 
+@media screen and (max-width: 768px) {
+  .infos__wrapper {
+    flex-direction: column;
+  }
+  .infos-info {
+    margin-bottom: 2rem;
+  }
+}
 #firms {
   padding: 4rem 0;
 }
-#firms .firm-icon {
-  font-size: 10rem;
+#firms svg {
+  font-size: 8rem;
+}
+#firms .swiper-slide {
+  text-align: center;
 }
 
 form.register, form.login {
@@ -12259,4 +12270,10 @@ form.register .error, form.login .error {
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
   margin-bottom: 2rem;
+}
+
+@media screen and (max-width: 576px) {
+  html {
+    font-size: 14px;
+  }
 }/*# sourceMappingURL=styles.css.map */

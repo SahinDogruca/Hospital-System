@@ -1,16 +1,18 @@
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
-import TextField from "../TextField";
-import MyPagination from "../MyPagination";
+
 import { useUser } from "@/context/UserContext";
 import { AiFillLeftCircle, AiFillRightCircle } from "react-icons/ai";
 import { IconContext } from "react-icons";
 import ReactPaginate from "react-paginate";
+import { create, getAll, getById } from "@/utils/db";
 
 const SetAppointment = ({ doctors, times }) => {
   const { user } = useUser();
   const [filteredTimes, setFilteredTimes] = useState(
-    times.filter((time) => new Date(time.time) >= new Date())
+    times.filter((time) => {
+      return new Date(time.time) >= new Date();
+    })
   );
   const [currentTimes, setCurrentTimes] = useState([]);
   const timesPerPage = 10;
@@ -37,8 +39,8 @@ const SetAppointment = ({ doctors, times }) => {
         specialties.push(doctor.specialty);
       }
     });
-    return specialties.map((specialty) => (
-      <option value={specialty} label={specialty} />
+    return specialties.map((specialty, i) => (
+      <option key={i} value={specialty} label={specialty} />
     ));
   };
 
@@ -53,6 +55,7 @@ const SetAppointment = ({ doctors, times }) => {
 
     return future.map((date) => (
       <option
+        key={date}
         value={new Date(date).toLocaleDateString("tr-Tr", {
           day: "2-digit",
           month: "2-digit",
@@ -94,16 +97,24 @@ const SetAppointment = ({ doctors, times }) => {
       timeId,
     };
 
-    const res = await fetch("http://localhost:8080/appointments", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(appointment),
+    const appointmentRes = await getAll("appointments");
+    const isFound = appointmentRes.find((app) => {
+      return (
+        app.patient.id === patientId &&
+        app.time.id === timeId &&
+        app.doctorId === doctorId
+      );
     });
 
-    if (res.status === 200) {
-      alert("Appointment set successfully!");
+    if (isFound) {
+      alert("You already have an appointment at this time");
+      return;
+    }
+
+    const resBody = await create("appointments", appointment);
+
+    if (resBody) {
+      alert("You appointment is successfully set");
     }
   };
 
@@ -111,7 +122,7 @@ const SetAppointment = ({ doctors, times }) => {
     <div>
       <h3 className="content__title">Set Appointment</h3>
       <div className="row">
-        <div className="col-md-3 col">
+        <div className="col-lg-3 col">
           <div className="filters">
             <h4 className="text-center">Filters</h4>
             <Formik
@@ -163,7 +174,11 @@ const SetAppointment = ({ doctors, times }) => {
                           formik.values.specialty === ""
                       )
                       .map((doctor) => (
-                        <option value={doctor.name} label={doctor.name} />
+                        <option
+                          key={doctor.id}
+                          value={doctor.name}
+                          label={doctor.name}
+                        />
                       ))}
                   </select>
                   <select
@@ -182,21 +197,24 @@ const SetAppointment = ({ doctors, times }) => {
                     <option value="" label="All"></option>
                     {getDates()}
                   </select>
+                  <div className="d-flex justify-content-center align-items-center">
+                    <button
+                      className="btn btn-primary m-3 text-center"
+                      type="submit"
+                    >
+                      filter
+                    </button>
 
-                  <button
-                    className="btn btn-primary m-3 text-center"
-                    type="submit"
-                  >
-                    filter
-                  </button>
-
-                  <p>müsait saat sayısı: {filteredTimes.length}</p>
+                    <p className="my-auto">
+                      müsait saat sayısı: {filteredTimes.length}
+                    </p>
+                  </div>
                 </Form>
               )}
             </Formik>
           </div>
         </div>
-        <div className="col-md-9 col">
+        <div className="col-lg-9 col">
           <div className="appointments">
             <h4>Appointments</h4>
             <table className="table">

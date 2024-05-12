@@ -21,6 +21,8 @@
         text-align: center;
         color: $clr-red;
 
+ 
+
         &__icon {
             font-size: $fs-sub;
             margin-bottom: 1rem;
@@ -41,4 +43,18 @@
     }
 
 
+}
+
+@media screen and (max-width: 768px) {
+    .infos {
+        &__wrapper {
+            flex-direction: column;
+        }
+
+        &-info {
+            margin-bottom: 2rem;
+        }
+
+        
+    }
 }

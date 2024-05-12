@@ -3,13 +3,12 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import TextField from "../TextField";
 import { useUser } from "../../context/UserContext";
-import { update } from "../../utils/doctorApi";
+import { update } from "../../utils/authApi";
 
 const EditUser = () => {
-  const { user, setUser } = useUser();
-  const [type, setType] = useState("patients");
+  const { user, setUser, userType, setUserType } = useUser();
   const [initialValues, setInitialValues] = useState({
-    type: "patients",
+    userType: "patients",
     tc: "",
     name: "",
     specialty: "",
@@ -20,7 +19,7 @@ const EditUser = () => {
   const validate = Yup.object({
     tc: Yup.string().required("TC required"),
     name: Yup.string().required("Name required"),
-    specialty: Yup.string().when("type", {
+    specialty: Yup.string().when("userType", {
       is: "doctors",
       then: Yup.string().required("Specialty required"),
     }),
@@ -33,11 +32,11 @@ const EditUser = () => {
   });
 
   useEffect(() => {
-    setType(user.specialty ? "doctors" : "patients");
+    setUserType(user.specialty ? "doctors" : "patients");
 
     // Initialize the initial values object based on user data
     setInitialValues({
-      type: user.specialty ? "doctors" : "patients",
+      userType: user.specialty ? "doctors" : "patients",
       tc: user.tc || "",
       name: user.name || "",
       specialty: user.specialty || "",
@@ -60,7 +59,7 @@ const EditUser = () => {
             password: values.password,
           };
 
-          const newUser = await update(user.id, updatedUser, type);
+          const newUser = await update(user.id, updatedUser, userType);
           setUser(newUser);
         }}
       >
@@ -68,24 +67,9 @@ const EditUser = () => {
           <div>
             <h1 className="text-center content__title">Edit Profile</h1>
             <Form className="form p-3">
-              <select
-                className="form-select"
-                name="type"
-                value={formik.values.type}
-                onChange={(e) => {
-                  setType(e.target.value);
-                  formik.setFieldValue("type", e.target.value);
-                }}
-                onBlur={formik.handleBlur}
-                style={{ display: "block" }}
-              >
-                <option value="patients">Patient</option>
-                <option value="doctors">Doctor</option>
-              </select>
-
               <TextField type="text" label="TC" name="tc" />
               <TextField type="text" label="Name" name="name" />
-              {type === "doctors" && (
+              {formik.values.userType === "doctors" && (
                 <TextField type="text" label="Specialty" name="specialty" />
               )}
               <TextField
@@ -107,7 +91,7 @@ const EditUser = () => {
               />
 
               <button className="btn btn-primary m-3" type="submit">
-                Register
+                Save
               </button>
               <button className="btn btn-dark m-3" type="reset">
                 Reset

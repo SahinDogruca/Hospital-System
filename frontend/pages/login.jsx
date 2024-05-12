@@ -2,16 +2,17 @@ import React, { useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import TextField from "../components/TextField";
 import * as Yup from "yup";
-import { login } from "../utils/doctorApi";
+import { login } from "../utils/authApi";
 import { useUser } from "../context/UserContext";
 import { useRouter } from "next/router";
 
 export default function App() {
   const router = useRouter();
-  const { user, setUser, isLogged, setIsLogged } = useUser();
-  const [type, setType] = useState("patients");
+  const { user, setUser, isLogged, setIsLogged, userType, setUserType } =
+    useUser();
+
   const validate = Yup.object({
-    tc: Yup.string().required("tc required"),
+    tc: Yup.string().required("TC required"),
     password: Yup.string()
       .min(4, "Password must be minimum 4 digits!")
       .required("Password Required!"),
@@ -24,17 +25,21 @@ export default function App() {
         validationSchema={validate}
         onSubmit={async (values) => {
           try {
-            console.log(type);
-            const usern = await login(values.tc, values.password, type);
+            const loggedInUser = await login(
+              values.tc,
+              values.password,
+              userType
+            );
 
-            await setUser(usern);
-            await setIsLogged(true);
-
-            if (usern) {
-              localStorage.setItem("user", JSON.stringify(usern));
+            if (loggedInUser && loggedInUser != {}) {
+              localStorage.setItem("user", JSON.stringify(loggedInUser));
+              await setUser(loggedInUser);
+              await setIsLogged(true);
+              await setUserType(user.specialty ? "doctors" : "patients");
               router.push("/dashboard");
             } else {
               console.log("User not found!");
+              alert("user not found");
             }
           } catch (error) {
             console.error("Error:", error);
@@ -48,14 +53,11 @@ export default function App() {
             <Form className="form p-3 login">
               <select
                 className="form-select"
-                name="colors"
-                defaultValue={formik.values.type}
-                value={formik.values.type}
+                name="userType"
+                value={formik.values.userType}
                 onChange={(e) => {
-                  setType(e.target.value);
+                  setUserType(e.target.value);
                   formik.handleChange(e);
-                  formik.values.type = e.target.value;
-                  console.log(formik.values.type);
                 }}
                 onBlur={formik.handleBlur}
                 style={{ display: "block" }}
@@ -93,7 +95,7 @@ export default function App() {
 }
 
 const initialValues = {
-  type: "patients",
+  userType: "patients",
   tc: "",
   password: "",
 };
