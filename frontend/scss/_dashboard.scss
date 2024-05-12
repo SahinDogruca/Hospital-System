@@ -1,0 +1,90 @@
+
+.dashboard {
+      min-height: 92vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-wrapper {
+        width: 100%;
+        max-width: 1200px;
+        min-height: 80%;
+        background-color: $clr-light;
+
+        .sidebar {
+            padding: 0;
+            border-right: 1px solid $clr-grey;
+            padding: 1rem;
+
+            &-header {
+                
+                h3 {
+
+
+                    text-align: center;
+                    color: $clr-blue;
+                    font-size: $fs-sub;
+                    font-weight: 700;
+                }
+            }
+
+            &-menu {
+                margin-top: 2rem;
+
+                ul {
+                    list-style: none;
+                    padding: 1rem;
+
+                    li {
+                        color: $clr-blue;
+                        font-size: $fs-base;
+                        font-weight: 500;
+                        font-family: $ff-sans;
+                        padding: 1rem 2rem;
+                        cursor: pointer;
+                        background-color: $clr-grey;
+                        border-radius: 5px;
+                        margin-bottom: 1rem;
+                        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+                        transition: all 0.3s;
+
+
+                        &:hover {
+                            background-color: $clr-grey-dark;
+                            color: $clr-light;
+
+                            a {
+                                color: $clr-light;
+                            
+                            }
+                        }
+
+                        a {
+                            text-decoration: none;
+                            color: $clr-blue;
+
+                            &:hover {
+                                color: $clr-light;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        .content {
+
+            &__title {
+                text-align: center;
+                color: $clr-blue;
+                font-size: $fs-sub;
+                font-family: $ff-mont;
+                font-weight: 500;
+                margin-bottom: 2rem;
+            }
+        }
+    } 
+}
+
+   

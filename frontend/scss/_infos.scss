@@ -1,0 +1,60 @@
+.infos {
+    padding: 4rem 0;
+    background-color: $clr-light;
+
+    &__title {
+        text-align: center;
+        font-size: $fs-head;
+        font-family: $ff-mont;
+        font-weight: bold;
+        color: $clr-blue;
+        margin-bottom: 2rem;
+    }
+
+    &__wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &-info {
+        text-align: center;
+        color: $clr-red;
+
+ 
+
+        &__icon {
+            font-size: $fs-sub;
+            margin-bottom: 1rem;
+        }
+
+        &__number {
+            font-size: $fs-base;
+            font-weight: bold;
+        }
+
+        &__name {
+            font-size: $fs-base;
+            font-weight: bold;
+        }
+
+
+
+    }
+
+
+}
+
+@media screen and (max-width: 768px) {
+    .infos {
+        &__wrapper {
+            flex-direction: column;
+        }
+
+        &-info {
+            margin-bottom: 2rem;
+        }
+
+        
+    }
+}
