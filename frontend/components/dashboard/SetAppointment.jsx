@@ -125,7 +125,14 @@ const SetAppointment = ({ doctors, times }) => {
 
       setContextAppointments([...contextAppointments, appointment]);
 
-      setFilteredTimes(filteredTimes.filter((time) => time.id !== timeId));
+      setFilteredTimes(
+        filteredTimes.filter((time) => {
+          time.id !== timeId &&
+            time.status === false &&
+            new Date(time.time) >= new Date();
+        })
+      );
+      window.location.reload();
     } else {
       alert("appointment can't set");
     }
