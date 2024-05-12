@@ -7,12 +7,22 @@ const WritePrescription = ({ patients }) => {
     e.preventDefault();
 
     const drugs = e.target.drugs.value;
+
+    if (!drugs) {
+      alert("Please enter drugs");
+      return;
+    }
     const drugsList = drugs.split(",");
     const doctorId = user.id;
 
     const patient = patients.find(
       (patient) => patient.tc === e.target.patient.value
     );
+
+    if (!patient) {
+      alert("Patient not found");
+      return;
+    }
 
     console.log({
       doctorId,
@@ -30,7 +40,7 @@ const WritePrescription = ({ patients }) => {
         patientId: patient.id,
         drugNames: drugsList,
       }),
-    });
+    }).catch((err) => alert(err.message));
 
     if (res.ok) {
       alert("Prescription written successfully");

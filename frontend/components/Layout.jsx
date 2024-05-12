@@ -31,9 +31,6 @@ const Layout = ({ children }) => {
         <Navbar />
       </header>
       <main>{children}</main>
-      <footer className="bg-primary text-white">
-        <Footer />
-      </footer>
     </div>
   );
 };

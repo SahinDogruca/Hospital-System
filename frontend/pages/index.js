@@ -9,8 +9,6 @@ export default function Home({ doctors }) {
     <>
       <Header />
       <Aboutme />
-      <Infos />
-      <FirmCarousel />
     </>
   );
 }
